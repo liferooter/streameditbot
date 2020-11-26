@@ -15,7 +15,7 @@ bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands=['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort'])
+@dp.message_handler(commands=['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk'])
 async def cmd_handler(message: types.Message):
     if not message.reply_to_message:
         await message.reply("You should reply on message to process it")
@@ -30,7 +30,7 @@ async def cmd_handler(message: types.Message):
     if stderr:
         await message.reply(f'<pre>{escape(stderr.decode("utf-8", errors="ignore"))}</pre>')
     elif stdout:
-        await message.reply_to_message.reply(escape(stdout.decode()))
+        await message.reply_to_message.reply(escape(stdout.decode("utf-8", errors="ignore")))
     else:
         await message.reply("<pre>Output is empty...</pre>")
 
@@ -50,7 +50,7 @@ Just add me in your group and learn how to use Unix stream editors.
 
 Reply on any message: /command <i>args</i>, where command is one of my supported commands.
 
-Now I support: sed, tail, head, grep, cut, tr, uniq, sort""")
+Now I support: sed, tail, head, grep, cut, tr, uniq, sort, awk""")
 
 
 if __name__ == '__main__':
