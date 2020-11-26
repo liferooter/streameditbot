@@ -28,7 +28,7 @@ async def cmd_handler(message: types.Message):
                                                 stdin=asyncio.subprocess.PIPE)
     stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'))
     if stderr:
-        await message.reply(f'<pre>{escape(stderr.decode())}</pre>')
+        await message.reply(f'<pre>{escape(stderr.decode("utf-8", errors="ignore"))}</pre>')
     elif stdout:
         await message.reply_to_message.reply(escape(stdout.decode()))
     else:
