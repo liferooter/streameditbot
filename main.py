@@ -16,7 +16,7 @@ dp = Dispatcher(bot)
 
 COMMANDS = ['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk']
 
-CMD_PREFIX = ["env", "-i", "PATH=/bin:/usr/bin"]
+CMD_PREFIX = ["env", "-i", "PATH=/bin:/usr/bin", "timeout", "2"]
 
 
 @dp.message_handler(commands=COMMANDS)
@@ -32,7 +32,7 @@ async def cmd_handler(message: types.Message):
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
-    stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'))
+    stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'),)
     if stderr:
         await message.reply(f'<pre>{escape(stderr.decode("utf-8", errors="ignore"))}</pre>')
     elif stdout:
