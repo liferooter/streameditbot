@@ -17,7 +17,7 @@ jobs:
         run: docker build -t streameditbot_img .
 
       - name: Stop previous vesion
-        run: docker stop streameditbot
+        run: docker stop streameditbot || echo Previous docker not exists
       
       - name: Run docker
         run: docker run -d --name streameditbot --rm -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} streameditbot_img:latest
