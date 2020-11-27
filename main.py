@@ -14,15 +14,19 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
 dp = Dispatcher(bot)
 
+COMMANDS = ['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk']
 
-@dp.message_handler(commands=['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk'])
+CMD_PREFIX = ["env", "-i", "PATH=/bin:/usr/bin"]
+
+
+@dp.message_handler(commands=COMMANDS)
 async def cmd_handler(message: types.Message):
     if not message.reply_to_message:
         await message.reply("You should reply on message to process it")
         return
 
     cmdline = message.text[1:]
-    proc = await asyncio.create_subprocess_exec(*split(cmdline),
+    proc = await asyncio.create_subprocess_exec(*CMD_PREFIX, *split(cmdline),
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
@@ -50,7 +54,7 @@ Just add me in your group and learn how to use Unix stream editors.
 
 Reply on any message: /command <i>args</i>, where command is one of my supported commands.
 
-Now I support: sed, tail, head, grep, cut, tr, uniq, sort, awk""")
+Now I support: """ + ', '.join(COMMANDS))
 
 
 if __name__ == '__main__':
