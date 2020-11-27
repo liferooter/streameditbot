@@ -25,10 +25,10 @@ async def cmd_handler(message: types.Message):
         await message.reply("You should reply on message to process it")
         return
 
-    cmdline = message.text[1:]
-    if '@' in cmdline.split()[0]:
-        cmdline = cmdline[:cmdline.find("@")] + cmdline[cmdline.find(" "):]
-    proc = await asyncio.create_subprocess_exec(*CMD_PREFIX, *split(cmdline),
+    cmdline = split(message.text[1:])
+    if "@" in cmdline[0]:
+        cmdline[0] = cmdline[:cmdline[0].find("@")]
+    proc = await asyncio.create_subprocess_exec(*CMD_PREFIX, *cmdline,
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
