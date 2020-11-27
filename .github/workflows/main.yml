@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: Linux
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker
+        run: docker build -t streameditbot_img .
+      
+      - name: Run docker
+        run: docker run -d --name streameditbot -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} streameditbot_img:latest
