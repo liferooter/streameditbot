@@ -19,7 +19,7 @@ COMMANDS = ['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk']
 CMD_PREFIX = ["env", "-i", "PATH=/bin:/usr/bin", "timeout", "2"]
 
 
-@dp.message_handler(regexp=f'{"||".join(COMMANDS)}')
+@dp.message_handler(regexp=f'(^{"|".join(COMMANDS)})')
 async def cmd_handler(message: types.Message):
     if not message.reply_to_message:
         await message.reply("You should reply on message to process it")
