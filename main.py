@@ -19,15 +19,13 @@ COMMANDS = ['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk']
 CMD_PREFIX = ["env", "-i", "PATH=/bin:/usr/bin", "timeout", "2"]
 
 
-@dp.message_handler(commands=COMMANDS)
+@dp.message_handler(regexp="||".join(COMMANDS))
 async def cmd_handler(message: types.Message):
     if not message.reply_to_message:
         await message.reply("You should reply on message to process it")
         return
 
-    cmdline = split(message.text[1:])
-    if "@" in cmdline[0]:
-        cmdline[0] = cmdline[:cmdline[0].find("@")]
+    cmdline = split(message.text)
     proc = await asyncio.create_subprocess_exec(*CMD_PREFIX, *cmdline,
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
