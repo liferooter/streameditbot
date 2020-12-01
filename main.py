@@ -29,7 +29,8 @@ async def cmd_handler(message: types.Message):
     proc = await asyncio.create_subprocess_exec(*CMD_PREFIX, *cmdline,
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
-                                                stdin=asyncio.subprocess.PIPE)
+                                                stdin=asyncio.subprocess.PIPE,
+                                                limit=8)
     stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'),)
     if stderr:
         await message.reply(f'<pre>{escape(stderr.decode("utf-8", errors="ignore"))}</pre>')
