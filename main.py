@@ -16,8 +16,6 @@ dp = Dispatcher(bot)
 
 COMMANDS = ['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk']
 
-CMD_PREFIX = ["env", "-i", "PATH=/bin:/usr/bin", "timeout", "2"]
-
 
 @dp.message_handler(regexp=f'^({"|".join(COMMANDS)})')
 async def cmd_handler(message: types.Message):
@@ -26,7 +24,7 @@ async def cmd_handler(message: types.Message):
         return
 
     cmdline = split(message.text)
-    proc = await asyncio.create_subprocess_exec(*CMD_PREFIX, *cmdline,
+    proc = await asyncio.create_subprocess_exec("bash", "./sandbox.sh", *cmdline,
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
