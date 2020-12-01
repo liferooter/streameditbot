@@ -52,7 +52,7 @@ Just add me in your group and learn how to use Unix stream editors.
 
 <b>Usage:</b>
 
-Reply on any message: /command <i>args</i>, where command is one of my supported commands.
+Reply on any message: command <i>args</i>, where command is one of my supported commands.
 
 Now I support: """ + ', '.join(COMMANDS))
 
