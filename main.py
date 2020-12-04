@@ -41,7 +41,10 @@ async def cmd_handler(message: types.Message):
     if stderr:
         await message.reply(f'<pre>{escape(stderr.decode("utf-8", errors="ignore"))}</pre>')
     elif stdout:
-        await message.reply_to_message.reply(escape(stdout.decode("utf-8", errors="ignore")))
+        if message.reply_to_message:
+            await message.reply_to_message.reply(escape(stdout.decode("utf-8", errors="ignore")))
+        else:
+            await message.reply(escape(stdout.decode('utf-8', errors='ignore')))
     else:
         await message.reply("<pre>Output is empty...</pre>")
 
