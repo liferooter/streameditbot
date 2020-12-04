@@ -20,16 +20,17 @@ COMMANDS = ['sed', 'grep', 'cut', 'tr', 'tail', 'head', 'uniq', 'sort', 'awk']
 
 @dp.message_handler(regexp=f'^({"|".join(COMMANDS)})')
 async def cmd_handler(message: types.Message):
-    if not message.reply_to_message:
-        await message.reply("You should reply on message to process it")
-        return
+    if message.reply_to_message:
+        input_text = message.reply_to_message.text.encode('utf-8')
+    else:
+        input_text = b''
 
     cmdline = split(message.text)
     proc = await asyncio.create_subprocess_exec("bash", "./sandbox.sh", *cmdline,
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
-    stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'))
+    stdout, stderr = await proc.communicate(input_text)
 
     # Telegram message length limit
     if len(stdout) >= MSG_LENGTH_LIMIT:
@@ -53,12 +54,14 @@ async def send_welcome(message: types.Message):
     :return:
     """
     await message.reply("""Hi!
-I am stream editor bot. I can evaluate best Unix stream processing utilities on messages.
+I am stream editor bot. I can evaluate best Unix stream processing utilities in chat.
 Just add me in your group and learn how to use Unix stream editors.
 
 <b>Usage:</b>
 
-Reply on any message: command <i>args</i>, where command is one of my supported commands.
+<i>command args</i>, where command is one of my supported commands.
+
+Reply on any message to use it as command input.
 
 Now I support: """ + ', '.join(COMMANDS))
 
