@@ -6,6 +6,7 @@ from html import escape
 from aiogram import Bot, Dispatcher, executor, types
 
 BOT_TOKEN: str = os.getenv("BOT_TOKEN")
+MSG_LENGTH_LIMIT = 2 ** 12
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +29,14 @@ async def cmd_handler(message: types.Message):
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
-    stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'),)
+    stdout, stderr = await proc.communicate(input=message.reply_to_message.text.encode('utf-8'))
+
+    # Telegram message length limit
+    if len(stdout) >= MSG_LENGTH_LIMIT:
+        stdout = b"Output is too long"
+    if len(stderr) >= MSG_LENGTH_LIMIT:
+        stderr = b"Error is too long"
+
     if stderr:
         await message.reply(f'<pre>{escape(stderr.decode("utf-8", errors="ignore"))}</pre>')
     elif stdout:
