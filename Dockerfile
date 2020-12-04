@@ -7,8 +7,8 @@ COPY sandbox.sh .
 COPY LICENSE .
 
 RUN python -m pip install aiogram
-RUN useradd bot
+RUN useradd -m bot
 
-USER bot
+# USER bot
 
 CMD ["python", "/usr/src/app/main.py"]
