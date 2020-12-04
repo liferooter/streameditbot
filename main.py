@@ -8,6 +8,7 @@ from aiogram import Bot, Dispatcher, executor, types
 
 BOT_TOKEN: str = os.getenv("BOT_TOKEN")
 MSG_LENGTH_LIMIT = 2 ** 12
+SANDBOX_USER='bot'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +28,7 @@ async def cmd_handler(message: types.Message):
         input_text = b''
 
     cmdline = message.text
-    proc = await asyncio.create_subprocess_exec("su", "nobody", "-c", f"/usr/src/app/sandbox.sh {cmdline}",
+    proc = await asyncio.create_subprocess_exec("su", SANDBOX_USER, "-c", f"/usr/src/app/sandbox.sh {cmdline}",
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
