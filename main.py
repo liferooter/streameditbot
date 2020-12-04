@@ -1,6 +1,7 @@
 import logging
 import os
 import asyncio
+from asyncio.subprocess import Process
 from shlex import split
 from html import escape
 from aiogram import Bot, Dispatcher, executor, types
@@ -25,8 +26,8 @@ async def cmd_handler(message: types.Message):
     else:
         input_text = b''
 
-    cmdline = split(message.text)
-    proc = await asyncio.create_subprocess_exec("bash", "./sandbox.sh", *cmdline,
+    cmdline = message.text
+    proc = await asyncio.create_subprocess_exec("su", "-", "bot", "-c", f"./sandbox.sh {cmdline}",
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)

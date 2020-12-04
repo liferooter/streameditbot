@@ -8,4 +8,4 @@ do
 done
 
 # Erase environment, set time limit and run
-su - bot -c "env -i PATH=/bin:/usr/bin timeout 1 $cmd"
+eval "env -i PATH=/bin:/usr/bin timeout 1 $cmd"
