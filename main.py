@@ -26,7 +26,7 @@ async def cmd_handler(message: types.Message):
         input_text = b''
 
     cmdline = split(message.text)
-    proc = await asyncio.create_subprocess_exec("bash", "./sandbox.sh", cmdline[0], ' '.join(cmdline[1:]),
+    proc = await asyncio.create_subprocess_exec("bash", "./sandbox.sh", *cmdline,
                                                 stdout=asyncio.subprocess.PIPE,
                                                 stderr=asyncio.subprocess.PIPE,
                                                 stdin=asyncio.subprocess.PIPE)
