@@ -1,0 +1,6 @@
+[submodule "minion"]
+	path = minion
+	url = https://github.com/jjs-dev/minion
+[submodule "modules/minion"]
+	path = modules/minion
+	url = https://github.com/jjs-dev/minion
